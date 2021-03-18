@@ -1,0 +1,62 @@
+
+entity Customer {
+	name String,
+    code String,
+    updatedAt ZonedDateTime
+}
+
+entity CustomerUser {
+    updatedAt ZonedDateTime
+}
+
+
+entity Loan {
+	loanId String,
+    borrowerName String,
+    amount BigDecimal,
+    status String,
+    updatedAt ZonedDateTime	
+}
+
+entity FundingRequest {
+	code String,
+    status String,
+    updatedAt ZonedDateTime
+}
+
+entity FundingRequestLoan {
+    updatedAt ZonedDateTime
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Customer to CustomerUser{customer},
+	Customer to	FundingRequest{customer},
+    FundingRequest to FundingRequestLoan{fundingRequest},
+    Customer to Loan{customer},
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	Customer{admin1} to User,
+    Customer{admin2} to User,
+	Customer{updatedBy} to User,
+	CustomerUser{user} to User,
+	CustomerUser{updatedBy} to User,
+	FundingRequest{updatedBy} to User,
+	FundingRequestLoan{loan} to Loan,
+	FundingRequestLoan{updatedBy} to User,
+	Loan{updatedBy} to User,
+}
+
+// Set pagination options
+paginate all with pagination
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+
+// Set an angular suffix
+// angularSuffix * with mfo
